@@ -1,7 +1,7 @@
 # 
 
 <!-- badges -->
-[![CircleCI](https://circleci.com/gh/lambdaisland/.svg?style=svg)](https://circleci.com/gh/lambdaisland/) [![cljdoc badge](https://cljdoc.org/badge/lambdaisland/)](https://cljdoc.org/d/lambdaisland/) [![Clojars Project](https://img.shields.io/clojars/v/lambdaisland/.svg)](https://clojars.org/lambdaisland/)
+[![CircleCI](https://circleci.com/gh/lambdaisland/daedalus.svg?style=svg)](https://circleci.com/gh/lambdaisland/daedalus) [![cljdoc badge](https://cljdoc.org/badge/lambdaisland/daedalus)](https://cljdoc.org/d/lambdaisland/daedalus) [![Clojars Project](https://img.shields.io/clojars/v/lambdaisland/daedalus.svg)](https://clojars.org/lambdaisland/daedalus)
 <!-- /badges -->
 
 ClojureScript wrapper for hxdaedalus-js path-finding and triangulation
@@ -16,7 +16,7 @@ ClojureScript wrapper for hxdaedalus-js path-finding and triangulation
 
 ## Support Lambda Island Open Source
 
- is part of a growing collection of quality Clojure libraries and
+daedalus is part of a growing collection of quality Clojure libraries and
 tools released on the Lambda Island label. If you are using this project
 commercially then you are expected to pay it forward by
 [becoming a backer on Open Collective](http://opencollective.com/lambda-island#section-contribute),
@@ -86,13 +86,13 @@ disappear.
 deps.edn
 
 ```
-lambdaisland/ {:mvn/version "0.0.0"}
+lambdaisland/daedalus {:mvn/version "0.0.0"}
 ```
 
 project.clj
 
 ```
-[lambdaisland/ "0.0.0"]
+[lambdaisland/daedalus "0.0.0"]
 ```
 <!-- /installation -->
 
@@ -127,7 +127,7 @@ project.clj
 <!-- contributing -->
 ## Contributing
 
-Everyone has a right to submit patches to , and thus become a contributor.
+Everyone has a right to submit patches to daedalus, and thus become a contributor.
 
 Contributors MUST
 

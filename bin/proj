@@ -8,7 +8,7 @@
 (lioss/main
  {:license        :mpl
   :inception-year 2021
-  :description    "ClojureScript wrapper for hxdaedalus-js path-finding and triangulation"})
+  :description    "Path finding and Delaunay triangulation in 2D, cljs wrapper for hxdaedalus-js"})
 
 ;; Local Variables:
 ;; mode:clojure
