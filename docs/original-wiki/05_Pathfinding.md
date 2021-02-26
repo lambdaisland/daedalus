@@ -69,7 +69,7 @@ Notice that:
  * `(pn_x, pn_y)` is the destination position
  * path has length 0 if no path was found
 
-===Path sampling===
+## Path sampling
 
 Depending of the use you do in your application, you could need to iterate through the path within a fixed distance each step. The `DDLSLinearPathSampler` can do it for you.
 
@@ -107,4 +107,3 @@ example of sampled path ; the purple dots show you the sampling steps:
 ![](/docs/original-wiki/img/page4/path_sampled.jpg)
 
 Next [Display debug view for your paths and entities](06_SimpleView2.md)
-- [07_MeshDatasExtractionFromBitmap.md](07_MeshDatasExtractionFromBitmap.md)
