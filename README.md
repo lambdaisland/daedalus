@@ -28,7 +28,58 @@ so that we may continue to enjoy a thriving Clojure ecosystem.
 
 <!-- /opencollective -->
 
-## Features
+## What does it do?
+
+Path finding in 2D space based on Delaunay triangulation. The main use case is
+for 2D games, where you want to determine a path from A to B, while keeping
+obstacles into account. For example, in point-in-click games, walking towards
+where the player has clicked.
+
+The original implementation was written in ActionScript by [Cédric
+Jules](https://github.com/totologic) in 2013. This code was later ported to Haxe
+as [hxDaedalus](https://github.com/hxDaedalus/hxDaedalus), a language which
+transpiles to multiple other languages, including JavaScript. This is how we end
+up with [hxdaedalus-js](https://www.npmjs.com/package/hxdaedalus-js), which this
+library is a ClojureScript wrapper for.
+
+- [Cédric's original announcement post](https://web.archive.org/web/20151102235416/http://totologic.blogspot.com/2013/12/introducing-daedalus-lib_19.html)
+- [Demo video](https://www.youtube.com/watch?v=5fZJ1x7R_u8)
+- [Original google code project](https://code.google.com/archive/p/daedalus-lib/)
+
+Cédric based their code on three research papers:
+
+- [Efficient Triangulation-Based Pathfinding, by Douglas Jon Demyen](/docs/pdf/thesis_demyen_2006.pdf)
+- [Fully Dynamic Constrained Delaunay Triangulations, by Kallmann, Bieri and Thalmann](/docs/pdf/fully_dynamic_constrained_delaunay_triangulation.pdf)
+- [An improved incremental algorithm for constructing restricted Delaunay triangulations, by Marc Vigo Anglada](/docs/pdf/An_Improved_Incremental_Algorithm_for_Constructing.pdf)
+
+This library
+
+- Adds ClojureScript printer definitions for all of Daedalus's types, so you can
+  see what you are doing when working on a REPL
+- Implement `ILookup`, so you can access plain variables and object getters with
+  `(:x obj)` style keyword access (also supports destructuring, `get-in`, etc.)
+- Implement `ITransientCollection` for `Mesh`, so you can conveniently `conj!`
+  things onto it
+- Create constructor functions, for a more idiomatic API
+- Adds a few helper functions, `build-rect-mesh`, `rect`, `find-path`
+
+Before:
+
+``` clojure
+(def p (d/PathFinder.))
+(set! (.-entity p) entity)
+(set! (.-mesh p) world)
+```
+
+After
+
+``` clojure
+(d/path-finder {:entity entity :mesh world})
+```
+
+The best docs for what this library can do are the [wiki pages of the original
+project](/docs/original-wiki), which I have archived here in case the original
+disappear.
 
 <!-- installation -->
 ## Installation
@@ -45,9 +96,33 @@ project.clj
 ```
 <!-- /installation -->
 
-## Rationale
-
 ## Usage
+
+``` clojure
+(require '[lambdaisland.daedalus :as d])
+
+;; Entity that is looking for a path, 
+(def entity (d/entity-ai {:x 10 :y 10 :radius 1}))
+
+;; you can update `:x` / `:y` to set the start position
+;; (set! (.-x entity) 20)
+
+(def world (d/build-rect-mesh 100 100))
+(def path-finder (d/path-finder {:entity entity :mesh world}))
+
+;; Add obstacle
+(conj! world (d/rect 10 12 10 10))
+
+;; Find a path
+(d/find-path path-finder 30 30))
+;;=>
+([10 10]
+ [20.09901714548254 11.004914272587285]
+ [20.38268343236509 11.076120467488714]
+ [20.707106781186546 11.292893218813452]
+ [20.89671072740957 11.557382929216907]
+ [30 30])
+```
 
 <!-- contributing -->
 ## Contributing
