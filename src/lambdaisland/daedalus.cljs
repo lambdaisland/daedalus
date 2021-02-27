@@ -3,6 +3,13 @@
             [applied-science.js-interop :as j]
             [lambdaisland.data-printers :as data-printers]))
 
+;; Difference between vanilla-cljs and shadow, shadow loads the package, which
+;; contains a `hxDaedalus` property. Vanilla-js includes the hxDaedalus.js,
+;; which defines hxDaedalus globally, which we then alias to "hxdaedalus-js"
+;; required above, via `:global-exports` in `deps.cljs`.
+(when-not daedalus/hxDaedalus
+  (set! (.-hxDaedalus daedalus) daedalus))
+
 (defn to-edn [plain-vars getters]
   (let [vars (remove #(= "_" (first (name %)))
                      (concat plain-vars getters))]
@@ -110,46 +117,46 @@
 (def SimpleView daedalus/hxDaedalus.view.SimpleView)
 
 ;; Define printers, keyword access, etc
-(setup-type AStar 'daedalus.ai/AStar [] [:radius])
-(setup-type EntityAI 'daedalus.ai/EntityAI [:dirNormY :dirNormX :y :x] [:approximateObject :radius :radiusSquared])
-(setup-type Funnel 'daedalus.ai/Funnel [:debugSurface] [:radius])
-(setup-type PathFinder 'daedalus.ai/PathFinder [:entity] [:mesh])
-(setup-type LinearPathSampler 'daedalus.ai.trajectory/LinearPathSampler [:entity] [:x :y :hasPrev :hasNext :count :countMax :samplingDistance])
-(setup-type PathIterator 'daedalus.ai.trajectory/PathIterator [] [:entity :x :y :hasPrev :hasNext :count :countMax])
-(setup-type Constants 'daedalus.data/Constants [] [])
-(setup-type ConstraintSegment 'daedalus.data/ConstraintSegment [:fromShape] [:id :edges])
-(setup-type ConstraintShape 'daedalus.data/ConstraintShape [:segments] [:id])
-(setup-type Edge 'daedalus.data/Edge [:fromConstraintSegments :colorDebug] [:id :isReal :isConstrained :originVertex :nextLeftEdge :leftFace :destinationVertex :oppositeEdge :prevLeftEdge :nextRightEdge :prevRightEdge :rotLeftEdge :rotRightEdge :rightFace])
-(setup-type Face 'daedalus.data/Face [:colorDebug] [:id :isReal :edge])
-(setup-type Mesh 'daedalus.data/Mesh [:_vertices :_edges :_faces] [:height :width :clipping :id :__constraintShapes])
-(setup-type Object 'daedalus.data/Object [] [:id :pivotX :pivotY :scaleX :scaleY :rotation :x :y :matrix :coordinates :constraintShape :hasChanged :edges])
-(setup-type Vertex 'daedalus.data/Vertex [:colorDebug] [:id :isReal :pos :fromConstraintSegments :edge])
-(setup-type Graph 'daedalus.data.graph/Graph [] [:id :edge :node])
-(setup-type GraphEdge 'daedalus.data.graph/GraphEdge [] [:id :prev :next :rotPrevEdge :rotNextEdge :oppositeEdge :sourceNode :destinationNode :data])
-(setup-type GraphNode 'daedalus.data.graph/GraphNode [] [:id :prev :next :outgoingEdge :successorNodes :data])
-(setup-type EdgeData 'daedalus.data.math/EdgeData [:sumDistancesSquared :length :nodesCount] [])
-(setup-type Geom2D 'daedalus.data.math/Geom2D [] [])
-(setup-type Matrix2D 'daedalus.data.math/Matrix2D [:a :b :c :d :e :f] [])
-(setup-type NodeData 'daedalus.data.math/NodeData [:index :point] [])
-(setup-type Point2D 'daedalus.data.math/Point2D [:x :y] [:length])
-(setup-type Potrace 'daedalus.data.math/Potrace [] [])
-(setup-type RandGenerator 'daedalus.data.math/RandGenerator [:rangeMin :rangeMax] [:seed])
-(setup-type ShapeSimplifier 'daedalus.data.math/ShapeSimplifier [] [])
-(setup-type Tools 'daedalus.data.math/Tools [] [])
-(setup-type BitmapMesh 'daedalus.factories/BitmapMesh [] [])
-(setup-type BitmapObject 'daedalus.factories/BitmapObject [] [])
-(setup-type RectMesh 'daedalus.factories/RectMesh [] [])
-(setup-type FromEdgeToRotatedEdges 'daedalus.iterators/FromEdgeToRotatedEdges [] [])
-(setup-type FromFaceToInnerEdges 'daedalus.iterators/FromFaceToInnerEdges [] [])
-(setup-type FromFaceToInnerVertices 'daedalus.iterators/FromFaceToInnerVertices [] [])
-(setup-type FromFaceToNeighbourFaces 'daedalus.iterators/FromFaceToNeighbourFaces [] [])
-(setup-type FromMeshToFaces 'daedalus.iterators/FromMeshToFaces [] [])
-(setup-type FromMeshToVertices 'daedalus.iterators/FromMeshToVertices [] [])
-(setup-type FromVertexToHoldingFaces 'daedalus.iterators/FromVertexToHoldingFaces [] [])
-(setup-type FromVertexToIncomingEdges 'daedalus.iterators/FromVertexToIncomingEdges [] [])
-(setup-type FromVertexToNeighbourVertices 'daedalus.iterators/FromVertexToNeighbourVertices [] [])
-(setup-type FromVertexToOutgoingEdges 'daedalus.iterators/FromVertexToOutgoingEdges [:realEdgesOnly] [])
-(setup-type SimpleView 'daedalus.view/SimpleView [:edgesColor :edgesWidth :edgesAlpha :constraintsColor :constraintsWidth :constraintsAlpha :verticesColor :verticesRadius :verticesAlpha :pathsColor :pathsWidth :pathsAlpha :entitiesColor :entitiesWidth :entitiesAlpha :faceColor :faceWidth :faceAlpha] [])
+(setup-type AStar 'hxDaedalus.ai/AStar [] [:radius])
+(setup-type EntityAI 'hxDaedalus.ai/EntityAI [:dirNormY :dirNormX :y :x] [:approximateObject :radius :radiusSquared])
+(setup-type Funnel 'hxDaedalus.ai/Funnel [:debugSurface] [:radius])
+(setup-type PathFinder 'hxDaedalus.ai/PathFinder [:entity] [:mesh])
+(setup-type LinearPathSampler 'hxDaedalus.ai.trajectory/LinearPathSampler [:entity] [:x :y :hasPrev :hasNext :count :countMax :samplingDistance])
+(setup-type PathIterator 'hxDaedalus.ai.trajectory/PathIterator [] [:entity :x :y :hasPrev :hasNext :count :countMax])
+(setup-type Constants 'hxDaedalus.data/Constants [] [])
+(setup-type ConstraintSegment 'hxDaedalus.data/ConstraintSegment [:fromShape] [:id :edges])
+(setup-type ConstraintShape 'hxDaedalus.data/ConstraintShape [:segments] [:id])
+(setup-type Edge 'hxDaedalus.data/Edge [:fromConstraintSegments :colorDebug] [:id :isReal :isConstrained :originVertex :nextLeftEdge :leftFace :destinationVertex :oppositeEdge :prevLeftEdge :nextRightEdge :prevRightEdge :rotLeftEdge :rotRightEdge :rightFace])
+(setup-type Face 'hxDaedalus.data/Face [:colorDebug] [:id :isReal :edge])
+(setup-type Mesh 'hxDaedalus.data/Mesh [:_vertices :_edges :_faces] [:height :width :clipping :id :__constraintShapes])
+(setup-type Object 'hxDaedalus.data/Object [] [:id :pivotX :pivotY :scaleX :scaleY :rotation :x :y :matrix :coordinates :constraintShape :hasChanged :edges])
+(setup-type Vertex 'hxDaedalus.data/Vertex [:colorDebug] [:id :isReal :pos :fromConstraintSegments :edge])
+(setup-type Graph 'hxDaedalus.data.graph/Graph [] [:id :edge :node])
+(setup-type GraphEdge 'hxDaedalus.data.graph/GraphEdge [] [:id :prev :next :rotPrevEdge :rotNextEdge :oppositeEdge :sourceNode :destinationNode :data])
+(setup-type GraphNode 'hxDaedalus.data.graph/GraphNode [] [:id :prev :next :outgoingEdge :successorNodes :data])
+(setup-type EdgeData 'hxDaedalus.data.math/EdgeData [:sumDistancesSquared :length :nodesCount] [])
+(setup-type Geom2D 'hxDaedalus.data.math/Geom2D [] [])
+(setup-type Matrix2D 'hxDaedalus.data.math/Matrix2D [:a :b :c :d :e :f] [])
+(setup-type NodeData 'hxDaedalus.data.math/NodeData [:index :point] [])
+(setup-type Point2D 'hxDaedalus.data.math/Point2D [:x :y] [:length])
+(setup-type Potrace 'hxDaedalus.data.math/Potrace [] [])
+(setup-type RandGenerator 'hxDaedalus.data.math/RandGenerator [:rangeMin :rangeMax] [:seed])
+(setup-type ShapeSimplifier 'hxDaedalus.data.math/ShapeSimplifier [] [])
+(setup-type Tools 'hxDaedalus.data.math/Tools [] [])
+(setup-type BitmapMesh 'hxDaedalus.factories/BitmapMesh [] [])
+(setup-type BitmapObject 'hxDaedalus.factories/BitmapObject [] [])
+(setup-type RectMesh 'hxDaedalus.factories/RectMesh [] [])
+(setup-type FromEdgeToRotatedEdges 'hxDaedalus.iterators/FromEdgeToRotatedEdges [] [])
+(setup-type FromFaceToInnerEdges 'hxDaedalus.iterators/FromFaceToInnerEdges [] [])
+(setup-type FromFaceToInnerVertices 'hxDaedalus.iterators/FromFaceToInnerVertices [] [])
+(setup-type FromFaceToNeighbourFaces 'hxDaedalus.iterators/FromFaceToNeighbourFaces [] [])
+(setup-type FromMeshToFaces 'hxDaedalus.iterators/FromMeshToFaces [] [])
+(setup-type FromMeshToVertices 'hxDaedalus.iterators/FromMeshToVertices [] [])
+(setup-type FromVertexToHoldingFaces 'hxDaedalus.iterators/FromVertexToHoldingFaces [] [])
+(setup-type FromVertexToIncomingEdges 'hxDaedalus.iterators/FromVertexToIncomingEdges [] [])
+(setup-type FromVertexToNeighbourVertices 'hxDaedalus.iterators/FromVertexToNeighbourVertices [] [])
+(setup-type FromVertexToOutgoingEdges 'hxDaedalus.iterators/FromVertexToOutgoingEdges [:realEdgesOnly] [])
+(setup-type SimpleView 'hxDaedalus.view/SimpleView [:edgesColor :edgesWidth :edgesAlpha :constraintsColor :constraintsWidth :constraintsAlpha :verticesColor :verticesRadius :verticesAlpha :pathsColor :pathsWidth :pathsAlpha :entitiesColor :entitiesWidth :entitiesAlpha :faceColor :faceWidth :faceAlpha] [])
 
 ;; Constructor functions, so we can set instance variables in one go
 (defn a-star [{:keys [radius mesh], :as opts}] (let [^js obj (AStar.)] (when radius (.set_radius obj radius)) (when mesh (.set_mesh obj mesh)) obj))
@@ -214,22 +221,3 @@
   (let [p #js []]
     (.findPath path-finder to-x to-y p)
     (map vec (partition 2 p))))
-
-
-(comment
-  ;; Example of path finding
-  (def entity (entity-ai {:x 10 :y 10 :radius 1}))
-  (def world (build-rect-mesh 100 100))
-  (def path (path-finder {:entity entity
-                          :mesh world}))
-
-  (conj! world (rect 10 12 10 10))
-
-  (find-path path 30 30))
-
-
-(.-name (fn [])) ;; => ""
-(.-name (fn hello [])) ;; => "lambdaisland$daedalus$hello"
-
-(str (fn [])) ;; => "function (){\nreturn null;\n}"
-(str (fn hello [])) ;; => "function lambdaisland$daedalus$hello(){\nreturn null;\n}"

@@ -114,7 +114,7 @@ project.clj
 (conj! world (d/rect 10 12 10 10))
 
 ;; Find a path
-(d/find-path path-finder 30 30))
+(d/find-path path-finder 30 30)
 ;;=>
 ([10 10]
  [20.09901714548254 11.004914272587285]
