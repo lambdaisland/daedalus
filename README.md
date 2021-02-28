@@ -110,10 +110,10 @@ project.clj
 (def world (d/build-rect-mesh 100 100))
 (def path-finder (d/path-finder {:entity entity :mesh world}))
 
-;; Add obstacle
+;; add obstacle
 (conj! world (d/rect 10 12 10 10))
 
-;; Find a path
+;; find a path
 (d/find-path path-finder 30 30)
 ;;=>
 ([10 10]

@@ -8,7 +8,8 @@
 ;; which defines hxDaedalus globally, which we then alias to "hxdaedalus-js"
 ;; required above, via `:global-exports` in `deps.cljs`.
 (when-not daedalus/hxDaedalus
-  (set! (.-hxDaedalus daedalus) daedalus))
+  (set! (.-hxDaedalus daedalus) daedalus)
+  (set! (.-hxPixels daedalus) js/hxPixels))
 
 (defn to-edn [plain-vars getters]
   (let [vars (remove #(= "_" (first (name %)))
@@ -421,14 +422,53 @@
 ;; Thin functional API on top
 
 (defn build-rect-mesh [w h]
-  (.buildRectangle RectMesh 100 100))
+  (.buildRectangle RectMesh w h))
 
 (defn rect [x y w h]
   (object {:coordinates (j/lit [0 0 0 h 0 h w h w h w 0 w 0 0 0])
            :x x
            :y y}))
 
-(defn find-path [^js path-finder to-x to-y]
-  (let [p #js []]
-    (.findPath path-finder to-x to-y p)
-    (map vec (partition 2 p))))
+(defn find-path
+  "Uses the path-finder to find a path from the path-finder's entity's current
+  position to the destination. Will fill up and return an array, which can be
+  reused, or shared with a LinearPathsampler."
+  ([^js path-finder to-x to-y]
+   (find-path path-finder to-x to-y #js []))
+  ([^js path-finder to-x to-y path]
+   (.findPath path-finder to-x to-y path)
+   path))
+
+(defn pairs
+  "The path finder returns a flat list of x and y values, turn this into [x y]
+  pairs for easier processing."
+  [path]
+  (map vec (partition 2 path)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Bitmap
+
+(defn img->image-data
+  "Return an ImageData for a given <img> tag, using an in-memory canvas"
+  [img]
+  (let [^js canvas (js/document.createElement "canvas")
+        ^js context (.getContext canvas "2d")
+        width (j/get img :width)
+        height (j/get img :height)]
+    (j/assoc! canvas :width width :height height)
+    (.drawImage context img 0 0)
+    (.getImageData context 0 0 width height)))
+
+(defn image-data->bmp-data [image-data]
+  (daedalus/hxPixels._Pixels.Pixels_Impl_.fromImageData image-data))
+
+(defn bmp-data->object [bmp-data]
+  (.buildFromBmpData ^js BitmapObject bmp-data))
+
+(defn img->object
+  "Convert a black-and-white bitmap image into an object that you can `conj!` onto
+  your mesh. Takes a HTMLImageElement."
+  [img-element]
+  (bmp-data->object
+   (image-data->bmp-data
+    (img->image-data img-element))))
