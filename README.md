@@ -1,7 +1,7 @@
 # 
 
 <!-- badges -->
-[![CircleCI](https://circleci.com/gh/lambdaisland/daedalus.svg?style=svg)](https://circleci.com/gh/lambdaisland/daedalus) [![cljdoc badge](https://cljdoc.org/badge/lambdaisland/daedalus)](https://cljdoc.org/d/lambdaisland/daedalus) [![Clojars Project](https://img.shields.io/clojars/v/lambdaisland/daedalus.svg)](https://clojars.org/lambdaisland/daedalus)
+[![cljdoc badge](https://cljdoc.org/badge/lambdaisland/daedalus)](https://cljdoc.org/d/lambdaisland/daedalus) [![Clojars Project](https://img.shields.io/clojars/v/lambdaisland/daedalus.svg)](https://clojars.org/lambdaisland/daedalus)
 <!-- /badges -->
 
 ClojureScript wrapper for hxdaedalus-js path-finding and triangulation
