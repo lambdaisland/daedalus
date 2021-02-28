@@ -45,6 +45,7 @@ library is a ClojureScript wrapper for.
 - [Cédric's original announcement post](https://web.archive.org/web/20151102235416/http://totologic.blogspot.com/2013/12/introducing-daedalus-lib_19.html)
 - [Demo video](https://www.youtube.com/watch?v=5fZJ1x7R_u8)
 - [Original google code project](https://code.google.com/archive/p/daedalus-lib/)
+- [hxDaedalus JS examples](https://github.com/hxDaedalus/hxDaedalus-Examples/tree/master/hxDaedalus-Examples/web)
 
 Cédric based their code on three research papers:
 
