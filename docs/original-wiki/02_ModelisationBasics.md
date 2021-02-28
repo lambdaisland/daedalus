@@ -21,7 +21,7 @@ var mesh:DDLSMesh = DDLSRectMeshFactory.buildRectangle(600, 400);
 
 The result is an instance of `DDLSMesh` as a 2 polygons rectangle of size 600x400:
 
-https://daedalus-lib.googlecode.com/svn/wiki/img/page1/rect_mesh.jpg
+![](/docs/original-wiki/img/page1/rect_mesh.jpg)
 
 Meshes implements coordinates space (x, y) with rules:
  * top-left corner defines (0, 0) coordinates
