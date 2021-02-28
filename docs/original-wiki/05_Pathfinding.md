@@ -58,7 +58,7 @@ for (var i:int=0 ; i<path.length/2 ; i++)
 
 example of path ; the purple dots show you the path coordinates:
 
-https://daedalus-lib.googlecode.com/svn/wiki/img/page4/path.jpg
+![](/docs/original-wiki/img/page4/path.jpg]
 
 Literally, the coordinates stored in path have the form:
 
@@ -75,7 +75,7 @@ Depending of the use you do in your application, you could need to iterate throu
 
 example:
 
-```actionscript
+```javascript
 var pathSampler:DDLSLinearPathSampler = new DDLSLinearPathSampler();
 pathSampler.samplingDistance = 5;
 pathSampler.path = path;
