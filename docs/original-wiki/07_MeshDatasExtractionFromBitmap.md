@@ -6,7 +6,7 @@ Given a bitmap, Daedalus Lib can triangulate it and extract for you the whole me
 
 While Daedalus Lib uses half-edge as internal data structure, it will return you a more common and easy to use face-vertex data structure, as shown on the picture:
 
-![](/docs/original-wiki/img/page6/mesh_regular_structure.jpg
+![](/docs/original-wiki/img/page6/mesh_regular_structure.jpg)
 
 The vertices array contains the collection of vertices in the mesh as native Actionscript Point instances, without duplication and without any particular order.
 
