@@ -420,7 +420,7 @@
     (.insertObject this obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Thin functional API on top
+;; Thin wrapper API
 
 (defn build-rect-mesh [w h]
   (.buildRectangle RectMesh w h))
@@ -459,6 +459,11 @@
   pairs for easier processing."
   [path]
   (map vec (partition 2 path)))
+
+(defn reset
+  "Reset a linear-path-sampler or path-iterator"
+  [^js sampler-or-iterator]
+  (.reset sampler-or-iterator)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bitmap

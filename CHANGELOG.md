@@ -2,9 +2,7 @@
 
 ## Added
 
-## Fixed
-
-## Changed
+- Added `reset` for path-iterators
 
 # 0.0.19 (2021-03-28 / e1b146f)
 
