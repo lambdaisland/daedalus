@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>lambdaisland</groupId>
   <artifactId>daedalus</artifactId>
-  <version>0.0.19</version>
+  <version>0.0.22</version>
   <name>daedalus</name>
   <description>Path finding and Delaunay triangulation in 2D, cljs wrapper for hxdaedalus-js</description>
   <url>https://github.com/lambdaisland/daedalus</url>
@@ -22,7 +22,7 @@
     <url>https://github.com/lambdaisland/daedalus</url>
     <connection>scm:git:git://github.com/lambdaisland/daedalus.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/lambdaisland/daedalus.git</developerConnection>
-    <tag>4c44e7a606d660ef6a01e04318c57501bfbe364a</tag>
+    <tag>68d947da275de95f803e18c68fa8a4a1832bc241</tag>
   </scm>
   <dependencies>
     <dependency>
@@ -59,7 +59,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <git-revision>4c44e7a606d660ef6a01e04318c57501bfbe364a</git-revision>
+              <git-revision>68d947da275de95f803e18c68fa8a4a1832bc241</git-revision>
             </manifestEntries>
           </archive>
         </configuration>
