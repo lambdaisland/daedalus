@@ -393,6 +393,7 @@
   (let [^js obj (FromVertexToNeighbourVertices.)]
     (when fromVertex (.set_fromVertex obj fromVertex))
     obj))
+
 (defn from-vertex-to-outgoing-edges [{:keys [realEdgesOnly fromVertex], :as opts}]
   (let [^js obj (FromVertexToOutgoingEdges.)]
     (extend-keys! obj opts [:realEdgesOnly])
@@ -428,6 +429,20 @@
   (object {:coordinates (j/lit [0 0 0 h 0 h w h w h w 0 w 0 0 0])
            :x x
            :y y}))
+
+(defn polygon
+  "Construct a polygon from a sequence of [x y] coordinate pairs. Can be `conj!`ed
+  onto a mesh."
+  [coords]
+  (let [segments (partition 2 1 (cons (last coords) coords))]
+    (object {:coordinates
+             (let [arr #js []]
+               (doseq [[[x1 y1] [x2 y2]] segments]
+                 (j/push! arr x1)
+                 (j/push! arr y1)
+                 (j/push! arr x2)
+                 (j/push! arr y2))
+               arr)})))
 
 (defn find-path
   "Uses the path-finder to find a path from the path-finder's entity's current
@@ -472,3 +487,21 @@
   (bmp-data->object
    (image-data->bmp-data
     (img->image-data img-element))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Debug view
+
+(defn draw-mesh [^js view world]
+  (.drawMesh view world))
+
+(defn draw-entity [^js view entity]
+  (.drawEntity view entity))
+
+(defn draw-path [^js view path]
+  (let [path (if (array? path)
+               path
+               (into-array (mapcat identity path)))]
+    (.drawPath view path)))
+
+(defn clear [^js view]
+  (.clear (j/get view :graphics)))

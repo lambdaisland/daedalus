@@ -8,7 +8,7 @@
 
 (def entity (dae/entity-ai {:x 10 :y 10 :radius 10}))
 
-(def mesh (dae/build-rect-mesh 600 400))
+(def mesh (dae/build-rect-mesh 3965 1000))
 (def path-finder (dae/path-finder {:entity entity :mesh mesh}))
 
 ;; add obstacle

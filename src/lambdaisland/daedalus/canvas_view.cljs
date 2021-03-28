@@ -57,18 +57,3 @@
    (canvas-view {} {}))
   ([canvas-opts view-opts]
    (dae/simple-view (BasicCanvas. canvas-opts view-opts) view-opts)))
-
-(defn draw-mesh [^js view world]
-  (.drawMesh view world))
-
-(defn draw-entity [^js view entity]
-  (.drawEntity view entity))
-
-(defn draw-path [^js view path]
-  (let [path (if (array? path)
-               path
-               (into-array (mapcat identity path)))]
-    (.drawPath view path)))
-
-(defn clear [^js view]
-  (.clear (j/get view :graphics)))
