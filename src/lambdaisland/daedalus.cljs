@@ -463,7 +463,7 @@
 (defn reset
   "Reset a linear-path-sampler or path-iterator"
   [^js sampler-or-iterator]
-  (.reset sampler-or-iterator)
+  (.reset sampler-or-iterator))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bitmap
