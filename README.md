@@ -87,13 +87,13 @@ disappear.
 deps.edn
 
 ```
-lambdaisland/daedalus {:mvn/version "0.0.19"}
+lambdaisland/daedalus {:mvn/version "0.0.22"}
 ```
 
 project.clj
 
 ```
-[lambdaisland/daedalus "0.0.19"]
+[lambdaisland/daedalus "0.0.22"]
 ```
 <!-- /installation -->
 
