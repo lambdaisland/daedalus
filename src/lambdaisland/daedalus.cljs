@@ -510,3 +510,46 @@
 
 (defn clear [^js view]
   (.clear (j/get view :graphics)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Combined path finder/sampler with a more convenient API
+
+(defprotocol IPathHandler
+  (set-location [this x y]
+    "Move the entity to a new location, this will clear out the current path.
+    Use this instead of setting :x/:y on the entity directly, to prevent the
+    path sampler from overwriting them on the next iteration.")
+  (set-destination [this x y]
+    "Set the destination for the entity, clearing out the current path.")
+  (set-mesh [this mesh]
+    "Replace the mesh, this will clear the current path.")
+  (next! [this]
+    "Move the entity one step closer to its destination. Updates entity.x /
+    entity.y, returns nil."))
+
+(defn path-handler
+  "Combined path-finder / path-sampler, hiding a bunch of implementation details,
+  and helping to keep these different stateful objects in sync.
+  See [[IPathHandler]] for method definitions."
+  [{:keys [entity mesh sampling-distance]
+    :or {sampling-distance 5}}]
+  (let [path (j/lit [(.-x entity) (.-y entity)])
+        finder (path-finder {:entity entity :mesh mesh})
+        sampler (linear-path-sampler {:entity entity
+                                      :samplingDistance sampling-distance
+                                      :path path})]
+    (reify IPathHandler
+      (set-location [this x y]
+        (j/assoc! entity :x x :y y)
+        (j/assoc! sampler :_currentX x :_currentY y)
+        (.splice path 0 (.-length path))
+        (.push path x)
+        (.push path y))
+      (set-destination [this x y]
+        (find-path finder x y path))
+      (set-mesh [this mesh]
+        (.set_mesh path-finder mesh)
+        (set-location this (.-x entity) (.-y entity)))
+      (next! [this]
+        (.next sampler)
+        nil))))

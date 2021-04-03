@@ -49,3 +49,15 @@
 
 
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def entity (specify! #js {:x 10 :y 10 :radius 10}
+              Object
+              (get_radius [this] (.-radius this))))
+(def mesh (dae/build-rect-mesh 3965 1000))
+(def handler (dae/path-handler {:entity entity :mesh mesh}))
+
+(dae/set-destination handler 100 100)
+(dae/next! handler)
+entity
