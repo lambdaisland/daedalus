@@ -496,17 +496,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Debug view
 
-(defn draw-mesh [^js view world]
-  (.drawMesh view world))
+(defn draw-mesh
+  ([^js view world]
+   (.drawMesh view world))
+  ([^js view world clear-before?]
+   (.drawMesh view world clear-before?)))
 
-(defn draw-entity [^js view entity]
-  (.drawEntity view entity))
+(defn draw-entity
+  ([^js view entity]
+   (.drawEntity view entity))
+  ([^js view entity clear-before?]
+   (.drawEntity view entity clear-before?)))
 
-(defn draw-path [^js view path]
-  (let [path (if (array? path)
-               path
-               (into-array (mapcat identity path)))]
-    (.drawPath view path)))
+(defn draw-path
+  ([^js view path]
+   (let [path (if (array? path)
+                path
+                (into-array (mapcat identity path)))]
+     (.drawPath view path)))
+  ([^js view path clear-before?]
+   (let [path (if (array? path)
+                path
+                (into-array (mapcat identity path)))]
+     (.drawPath view path clear-before?))))
 
 (defn clear [^js view]
   (.clear (j/get view :graphics)))
@@ -525,31 +537,55 @@
     "Replace the mesh, this will clear the current path.")
   (next! [this]
     "Move the entity one step closer to its destination. Updates entity.x /
-    entity.y, returns nil."))
+    entity.y, returns nil.")
+  (debug-draw [this] [this opts]))
 
 (defn path-handler
   "Combined path-finder / path-sampler, hiding a bunch of implementation details,
   and helping to keep these different stateful objects in sync.
   See [[IPathHandler]] for method definitions."
-  [{:keys [entity mesh sampling-distance]
+  [{:keys [entity mesh sampling-distance view]
     :or {sampling-distance 5}}]
   (let [path (j/lit [(.-x entity) (.-y entity)])
         finder (path-finder {:entity entity :mesh mesh})
         sampler (linear-path-sampler {:entity entity
                                       :samplingDistance sampling-distance
                                       :path path})]
-    (reify IPathHandler
+    (reify
+      IPathHandler
       (set-location [this x y]
-        (j/assoc! entity :x x :y y)
-        (j/assoc! sampler :_currentX x :_currentY y)
         (.splice path 0 (.-length path))
         (.push path x)
-        (.push path y))
+        (.push path y)
+        ;; Updates x/y on the entity and _currentX/_currentY on the sampler
+        (.reset sampler))
       (set-destination [this x y]
-        (find-path finder x y path))
+        (find-path finder x y path)
+        (.reset sampler))
       (set-mesh [this mesh]
-        (.set_mesh path-finder mesh)
-        (set-location this (.-x entity) (.-y entity)))
+        (.set_mesh finder mesh)
+        (set-location this (.-x (:entity this)) (.-y (:entity this))))
       (next! [this]
         (.next sampler)
-        nil))))
+        nil)
+      (debug-draw [this]
+        (debug-draw this nil))
+      (debug-draw [this {:keys [entity? mesh? path?]
+                         :or {entity? true mesh? true path? true}}]
+        (when view
+          (clear view)
+          (when mesh? (draw-mesh view (:mesh this)))
+          (when entity? (draw-entity view entity))
+          (when path? (draw-path view path))))
+
+      ILookup
+      (-lookup [this k]
+        (case k
+          :path path
+          :finder finder
+          :sampler sampler
+          :mesh (.get_mesh finder)
+          :entity (.-entity sampler)
+          :view view))
+      (-lookup [this k not-found]
+        (or (-lookup this k) not-found)))))

@@ -2,9 +2,9 @@
 
 ## Added
 
-## Fixed
-
-## Changed
+- Two-arity version of debug draw functions
+- Add debug-draw to path-handler
+- Add ILookup support to path-handler
 
 # 0.0.28 (2021-04-03 / 6df687c)
 
