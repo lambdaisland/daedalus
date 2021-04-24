@@ -535,6 +535,8 @@
     "Set the destination for the entity, clearing out the current path.")
   (set-mesh [this mesh]
     "Replace the mesh, this will clear the current path.")
+  (next? [this]
+    "Is the entity still moving?")
   (next! [this]
     "Move the entity one step closer to its destination. Updates entity.x /
     entity.y, returns nil.")
@@ -568,6 +570,8 @@
       (next! [this]
         (.next sampler)
         nil)
+      (next? [this]
+        (.get_hasNext sampler))
       (debug-draw [this]
         (debug-draw this nil))
       (debug-draw [this {:keys [entity? mesh? path?]
