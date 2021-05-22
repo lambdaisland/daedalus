@@ -323,9 +323,9 @@
     (extend-keys! obj opts [:sumDistancesSquared :length :nodesCount])
     obj))
 
-(defn geom-2-d [] (Geom2D.))
+(defn geom-2d [] (Geom2D.))
 
-(defn matrix-2-d [a_ b_ c_ d_ e_ f_ {:keys [a b c d e f], :as opts}]
+(defn matrix-2d [a_ b_ c_ d_ e_ f_ {:keys [a b c d e f], :as opts}]
   (let [^js obj (Matrix2D. a_ b_ c_ d_ e_ f_)]
     (extend-keys! obj opts [:a :b :c :d :e :f])
     obj))
@@ -335,7 +335,7 @@
     (extend-keys! obj opts [:index :point])
     obj))
 
-(defn point-2-d [x_ y_ {:keys [x y], :as opts}]
+(defn point-2d [x_ y_ {:keys [x y], :as opts}]
   (let [^js obj (Point2D. x_ y_)]
     (extend-keys! obj opts [:x :y])
     obj))
@@ -418,6 +418,15 @@
   Mesh
   (-conj! [^js this obj]
     (.insertObject this obj)))
+
+(defn locate-position
+  "return one the following, in priority order:
+  - an existant vertex (if (x, y) lies on this vertex)
+  - an existant edge (if (x, y) lies on this edge )
+  - an existant face (if (x, y) lies on this face )
+  - null if outside mesh"
+  [x y mesh]
+  (.locatePosition Geom2D x y mesh))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Thin wrapper API
@@ -540,6 +549,8 @@
   (next! [this]
     "Move the entity one step closer to its destination. Updates entity.x /
     entity.y, returns nil.")
+  (reachable? [this x y]
+    "Is there a path to the new location")
   (debug-draw [this] [this opts]))
 
 (defn path-handler
@@ -566,12 +577,19 @@
         (.reset sampler))
       (set-mesh [this mesh]
         (.set_mesh finder mesh)
-        (set-location this (.-x (:entity this)) (.-y (:entity this))))
+        (set-location this (.-x ^js (:entity this)) (.-y ^js (:entity this))))
       (next! [this]
         (.next sampler)
         nil)
       (next? [this]
         (.get_hasNext sampler))
+      (reachable? [this x y]
+        (let [faces #js []
+              edges #js []
+              {:keys [entity astar]} this]
+          (.set_radius astar (.get_radius entity))
+          (.findPath astar (.-x ^js entity) (.-y ^js entity) x y faces edges)
+          (boolean (seq faces))))
       (debug-draw [this]
         (debug-draw this nil))
       (debug-draw [this {:keys [entity? mesh? path?]
@@ -589,7 +607,8 @@
           :finder finder
           :sampler sampler
           :mesh (.get_mesh finder)
-          :entity (.-entity sampler)
-          :view view))
+          :entity (.-entity ^js sampler)
+          :view view
+          :astar (.-astar ^js finder)))
       (-lookup [this k not-found]
         (or (-lookup this k) not-found)))))
